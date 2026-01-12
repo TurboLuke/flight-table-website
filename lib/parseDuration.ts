@@ -30,3 +30,25 @@ export function minutesToHHMM(mins: number | null | undefined): string {
   const m = mins % 60;
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
+
+// Parses times of day like "6:00", "06:00", or "06:00:30" to minutes since midnight.
+// Returns null if the input is invalid.
+export function parseHHMMToMinutes(input: string | number | null | undefined): number | null {
+  if (input == null) return null;
+  if (typeof input === "number") {
+    // if already numeric minutes, accept directly
+    return Number.isFinite(input) ? input : null;
+  }
+  const s = String(input).trim();
+  // Match H:MM or HH:MM with optional :SS
+  const m = s.match(/^([0-9]{1,2}):([0-9]{2})(?::([0-9]{2}))?$/);
+  if (!m) return null;
+  const h = Number(m[1]);
+  const min = Number(m[2]);
+  const sec = m[3] ? Number(m[3]) : 0;
+  if ([h, min, sec].some(Number.isNaN)) return null;
+  if (h < 0 || h > 23) return null;
+  if (min < 0 || min > 59) return null;
+  if (sec < 0 || sec > 59) return null;
+  return h * 60 + min; // ignore seconds granularity for comparisons
+}

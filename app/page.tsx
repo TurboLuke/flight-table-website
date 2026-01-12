@@ -11,7 +11,7 @@ import {
   useReactTable,
   flexRender
 } from "@tanstack/react-table";
-import { minutesToHHMM, parsePandasTimedeltaToMinutes } from "../lib/parseDuration";
+import { minutesToHHMM, parsePandasTimedeltaToMinutes, parseHHMMToMinutes } from "../lib/parseDuration";
 
 type Row = {
   direction: string;
@@ -122,15 +122,24 @@ export default function Page() {
           </thead>
 
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="odd:bg-neutral-50">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-3 py-2 text-sm">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {table.getRowModel().rows.map((row) => {
+              const r = row.original;
+              const priceOk = typeof r.price_sum === "number" && r.price_sum < 60;
+              const layoverOk = typeof r.layover_min === "number" && r.layover_min < 120;
+              const arrMin = parseHHMMToMinutes(r.leg2_arr);
+              const arrivalOk = arrMin != null && arrMin >= 6 * 60 && arrMin <= 18 * 60;
+              const highlight = priceOk  || arrivalOk  || layoverOk;
+
+              return (
+                <tr key={row.id} className={highlight ? "bg-green-100" : "odd:bg-neutral-50"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-3 py-2 text-sm">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
