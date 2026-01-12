@@ -101,7 +101,7 @@ export default function Page() {
 
   return (
     <main className="p-6">
-      <h1 className="mb-4 text-2xl font-semibold">Flight Connections</h1>
+      <h1 className="mb-4 text-2xl font-semibold">Flight Connections 🐷</h1>
 
       <div className="overflow-auto rounded-xl border">
         <table className="min-w-full">
