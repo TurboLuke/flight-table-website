@@ -72,8 +72,10 @@ export default function Page() {
     { accessorKey: "weekday", header: "Weekday" },
     { accessorKey: "leg1_flight", header: "Leg1" },
     { accessorKey: "leg1_dep", header: "Dep 1" },
+    { accessorKey: "leg1_arr", header: "Arr 1" },
     { accessorKey: "leg2_flight", header: "Leg2" },
     { accessorKey: "leg2_dep", header: "Dep 2" },
+    { accessorKey: "leg2_arr", header: "Arr 2" },
     {
       accessorKey: "layover_min",
       header: "Layover",
